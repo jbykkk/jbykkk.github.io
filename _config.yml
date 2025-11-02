@@ -16,7 +16,7 @@ timezone: Asia/Shanghai
 
 title: CrabPeelMyShell # the main title
 
-tagline: 酱板鱼的知识库 # it will display as the subtitle
+tagline: Still we rise. # it will display as the subtitle
 
 description: >- # used by seo meta and the atom feed
   用于存放酱板鱼整理的各类内容包括但不限于：本科学习阶段一些课程整理出的知识体系，
@@ -98,7 +98,7 @@ theme_mode: # [light | dark]
 cdn:
 
 # the avatar on sidebar, support local or CORS resources
-avatar: https://avatars.githubusercontent.com/u/209502307?s=400&u=e60337831619bf380090fa5bd5c5e083fa633a37&v=4
+avatar: /assets/img/avatar.jpg
 
 # The URL of the site-wide social preview image used in SEO `og:image` meta tag.
 # It can be overridden by a customized `page.image` in front matter.
