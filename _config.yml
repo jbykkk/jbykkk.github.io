@@ -16,7 +16,7 @@ timezone: Asia/Shanghai
 
 title: CrabPeelMyShell # the main title
 
-tagline: Still we rise. # it will display as the subtitle
+tagline: Keep blogging # it will display as the subtitle
 
 description: >- # used by seo meta and the atom feed
   dont know
@@ -99,7 +99,7 @@ theme_mode: # [light | dark]
 cdn:
 
 # the avatar on sidebar, support local or CORS resources
-avatar: /assets/img/avatar.jpg
+avatar: assets/img/DTMCorvette.jpg
 
 # The URL of the site-wide social preview image used in SEO `og:image` meta tag.
 # It can be overridden by a customized `page.image` in front matter.
