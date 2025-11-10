@@ -100,6 +100,8 @@ void merge_sort( Type *array, int first, int last ) {
 - 然后我们的目标是将这个列表中小于pivot的元素放在pivot的左边（**从后面开始**），大于pivot的元素放在这个列表的右边（**从前面开始**），这样才能进行接下来的分治递归；
 具体实现和过程的模拟   *P240* 
 
+对于Quicksort来说，存在最后坏的情况，这时，时间和空间复杂度都变得更差；
+
 三个实现 $\Theta(nln(n))$ 的算法对比总结：
 
 | | Average Run Time | Worst-case Run Time | Average Memory | Worst-case Memory |
@@ -108,3 +110,4 @@ void merge_sort( Type *array, int first, int last ) {
 | **Merge Sort** | $\Theta(n \ln(n))$ | $\Theta(n \ln(n))$ | $\Theta(n)$ | $\Theta(n)$ |
 | **Quicksort** | $\Theta(n \ln(n))$ | $\Theta(n^2)$ | $\Theta(\ln(n))$ | $\Theta(n)$ |
 
+只有Heapsort是in-place的，Mergesort和Quicksort都需要额外的空间复杂度；
