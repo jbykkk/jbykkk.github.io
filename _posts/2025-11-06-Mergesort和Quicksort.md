@@ -1,7 +1,7 @@
 ---
-title: Mergesort和Quicksort排序
+title: 归并排序（Mergesort）和快排（Quicksort）
 date: 2025-11-06 11:58:00 +0800
-description: 
+description:
 categories:
   - 数据结构
   - 课程笔记

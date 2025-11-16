@@ -7,7 +7,8 @@ categories:
   - 课程笔记
 tags:
   - 数据结构
-  - 排序算法
+  - 哈希表
+  - 哈希函数
 math: true
 ---
 
