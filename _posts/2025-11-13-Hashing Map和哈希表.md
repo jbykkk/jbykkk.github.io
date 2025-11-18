@@ -14,7 +14,7 @@ math: true
 
 前面我们学习过在AVL树中，我们实现查找到叶子节点或者其他操作的时间受到树高 $O(\log N)$ 的限制，现在我们再来看看有没有更快的一种搜索并查找我们想要的数据。
 
-#### Map ADT
+# Map ADT
 首先来看看一种新的ADT，Map，映射。
 
 一个映射是一个或多个**键值对 `(Key, Value)`** 的集合，对于每一个键值对，**Key是唯一的**。
@@ -22,17 +22,17 @@ math: true
 - `get(key)`：获取键对应的值
 - `put(key, value)`：插入或更新键值对
 
-#### Hash Table 哈希表
+# Hash Table 哈希表
 在哈希表 (Hash Table) 中，通过**哈希函数**将键映射为一个哈希值（通常是数组索引）来实现 $O(1)$ 时间的查找访问。
 
 我们先定义：
 - 一个哈希表（数组）的长度为 $TableSize$ ；
 - 对应的哈希函数 `hash(key)` ，来将一个整数映射到范围为 `[0,TableSize-1]` 的数组索引中。
 
-##### **对于整数值key**，
+## **对于整数值key**，
 为了使key能映射到整个table的范围当中，通常采用这样的哈希函数：
 
-```cpp
+```c++
 int hash( int key, int tableSize ) {
     return key % tableSize;
 }
@@ -40,24 +40,27 @@ int hash( int key, int tableSize ) {
 
 在整数值key的情况当中，理想的情况是**均匀随机分布**，这样能尽可能保证表单元能被使用。
 
-##### **对于字符串key**
+## **对于字符串key**
 可以通过 `ASCII` 来转换为整数表示，我们一般有三种哈希函数的设计方法：
 
 - **第一种：将字符串中的全部字符 `ASCII` 值相加求和**
+
 这种办法最简单，但是也有一个致命的问题，非常容易出现 Collisions，也就是两个键的映射重复（出现碰撞），例如：“rescued”，“secured”，“seducer”，这三个词 ASCII 码都是相同的。
 
 并且当 TableSize 很大的时候，假设我们的字符串最多有8个字符，即使我们将他们最大的ASCII码字符全部加起来 $8*127+1(0的情况)=1017$ ，也最多使用1017个，浪费了很多空间。
 
-- **第二种：使用 $key[0] + 27*key[1] + 27²*key[2]$** 
+- **第二种：**  使用 $key[0] + 27\cdot key[1] + 27^2 \cdot key[2]$ 
+
 这种方法是借鉴了十进制数中的表示方法：$123 = 1*10^0+2*10^1+3*10^2$ ，但是这里只使用了3个字符，数据量小且比较便捷，但是当然也不可避免地会出现很多冲突。
 
 同时，key存储的通常是人名、物品名之类有规律的单词，几乎不会使用某些字符。因此也会造成存储浪费。
 
-- **第三种：$key[N−1]⋅37N+key[N−2]⋅37N−1+⋯+key[1]⋅37+key[0]$** 
+- **第三种：** $key[N−1]⋅37N+key[N−2]⋅37N−1+⋯+key[1]⋅37+key[0]$ 
+
 这是一种 `java` 语言在处理字符串时使用的哈希函数映射方式，有比较好的效果。
 采用了多项式滚动的表示方法，和第二种类似，但是可以覆盖一个字符串的全部字符；
 
-```cpp
+```c++
 int hash( String key, int tableSize ) {
     int hashVal = 0;
     for( int i = 0; i < key.length( ); i++ ) 
@@ -75,7 +78,7 @@ int hash( String key, int tableSize ) {
 
 当然这种采用火力覆盖的方式仍然会在数据量较大时占用巨大空间，导致执行速度变慢。
 
-#### 关于质数的参与
+## 关于质数的参与
 其实 TableSize 也需要尽可能使用质数，这样哈希函数在通过取模操作来进行映射时能降低余数出现重合（碰撞）的可能性。（这里主要和数论有关）
 
 *“为了减少重合，TableSize 不应该（在取模之前）成为任何一个较大的哈希值的因数。”*
@@ -88,11 +91,13 @@ int hash( String key, int tableSize ) {
 
 接下来将讨论多个 Hash Table Collisions 的解决办法。
 
-#### Separate Chaining（分散链式） *P26* 
+# Separate Chaining（分散链式） *P26* 
 
 分散链式的思想很简单，就是将 key hash到一个桶 bucket 上，哈希值（bucket）重复的元素在这个 bucket处形成一个链表来存储，需要注意添加新的元素到这个链表的后面时使用的方法是 `prepend` ，前向添加。
-![[前向添加.png]]
-寻找这个key需要的时间是：hash+链表中的遍历查找
+
+![](resources/Hashing/前向添加.png)
+
+寻找这个 key 需要的时间是：hash + 链表中的遍历查找
 假设哈希函数计算需要 $O(1)$ 的时间，那么在后续链表中的查找需要多少时间呢？
 
 这里我们给出一个参数：负载因数（Load Factor）$$\lambda=\frac{N}{TableSize}$$
@@ -108,31 +113,33 @@ $N$ 是key的数量，$\lambda$ 表示了后续链表的平均长度。
 
 如果不使用链表呢？
 
-#### Probing（探针检测） *P33* 
+# Probing（探针检测） *P33* 
 
 当我们将一个key hash后，哈希值发生碰撞，那么就移动到这个哈希值（索引）后面的某个空位置。
-![[链式probing.png]]
+
+![](resources/Hashing/链式probing.png)
 
 这种方式就是 **Probing（探针检测）**，我们可以用一个公式来表示： $$(hash(x)+f(i))\%TableSize$$
-##### Linear Probing  
+
+## Linear Probing  
 如果这里 $f(i)=i$ 是一个线性函数，用来表示第 $i$ 次重复时后移 $i$ 个，即为”Linear Probing“。
 
-如果要查找一个key，就要从这个key一开始被hash到的hash值来查找。因此这样的方法会使哈希值形成一簇一簇的样子。
+如果要查找一个 key，就要从这个key一开始被hash到的hash值来查找。因此这样的方法会使哈希值形成一簇一簇的样子。
 
 但这样的探针检测方式会在数据量越来越大时产生很大的cluster，很像在hash表中建了一个链表。在后面需要寻找空的hash位置时极为困难。
 
-##### Quadratic Probing
+## Quadratic Probing
 那么这时候我们再考虑使用二次函数 $f(i)=i^2$ ，即 **Quadratic Probing**。*P50* 
 
-二次探针很好地解决了成簇的问题，仍然要求TableSize需要是质数来避免出现碰撞，但此时是有空闲的hash值位置。并且如果 $\lambda>0.5$ ，那么即使有空位且TableSize为质数，也很难再成功放入。
+二次探针很好地解决了成簇的问题，仍然要求 TableSize 需要是质数来避免出现碰撞，但此时是有空闲的hash值位置。并且如果 $\lambda>0.5$ ，那么即使有空位且 TableSize 为质数，也很难再成功放入。
 
-##### 二次哈希（Double Hashing）
+## 二次哈希（Double Hashing）
 
-再考虑变形：$f(i)=i*hash_2(x)$ 来使用二次哈希进行相同hash值的计算与偏移。*P60* 
+再考虑变形：$f(i)=i\cdot hash_2(x)$ 来使用二次哈希进行相同 hash 值的计算与偏移。*P60* 
 ![[二次哈希.png]]
 对于这个二次哈希函数的选择我们需要非常的谨慎！否则可能出现重复的永远映射到同一个地方！
-对于整数的hashing，比较好的是 $hash_2(x)=R-(x\%R)$ ，只要设计合理，二次哈希能带来相对最好的key的分布。
+对于整数的 hashing，比较好的是 $hash_2(x)=R-(x\%R)$ ，只要设计合理，二次哈希能带来相对最好的 key 的分布。
 
-一般来说，当我们进行了大于 $\frac{TableSize}{2}$ 的insert后，就需要对哈希表进行 **Rehashing**，重哈希。
+一般来说，当我们进行了大于 $\frac{TableSize}{2}$ 的 insert 后，就需要对哈希表进行 **Rehashing**，重哈希。
 
-注意，由于hashing是基于 $TableSize$ 的，因此 rehash 时不能简单地平移或者不动，而是需要**基于新的 $TableSize$ 重新 hashing**，Rehashing需要 $O(n)$ 的时间。
+注意，由于 hashing 是基于 $TableSize$ 的，因此 rehash 时不能简单地平移或者不动，而是需要**基于新的 $TableSize$ 重新 hashing**，Rehashing需要 $O(n)$ 的时间。
