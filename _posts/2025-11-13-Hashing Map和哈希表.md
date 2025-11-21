@@ -51,20 +51,20 @@ int hash( int key, int tableSize ) {
 
 - **第二种：**  使用 $key[0] + 27\cdot key[1] + 27^2 \cdot key[2]$ 
 
-这种方法是借鉴了十进制数中的表示方法：$123 = 1*10^0+2*10^1+3*10^2$ ，但是这里只使用了3个字符，数据量小且比较便捷，但是当然也不可避免地会出现很多冲突。
+这种方法是借鉴了十进制数中的表示方法（在这里我们只考虑字符串类型，因此1并不是在百位，而是作为第 `[0]` 个值）$123 = 1*10^0+2*10^1+3*10^2$ ，但是这里只使用了3个字符，数据量小且比较便捷，但是当然也不可避免地会出现很多冲突。
 
 同时，key存储的通常是人名、物品名之类有规律的单词，几乎不会使用某些字符。因此也会造成存储浪费。
 
-- **第三种：** $key[N−1]⋅37N+key[N−2]⋅37N−1+⋯+key[1]⋅37+key[0]$ 
+- **第三种：** $key[N−1]⋅31^N+key[N−2]⋅31^{N−1}+⋯+key[1]⋅31+key[0]$ 
 
 这是一种 `java` 语言在处理字符串时使用的哈希函数映射方式，有比较好的效果。
 采用了多项式滚动的表示方法，和第二种类似，但是可以覆盖一个字符串的全部字符；
 
 ```c++
-int hash( String key, int tableSize ) {
+int hash( string key, int tableSize ) {
     int hashVal = 0;
     for( int i = 0; i < key.length( ); i++ ) 
-        hashVal = 37 * hashVal + key[i];
+        hashVal = 31 * hashVal + key[i];
 
     hashVal %= tableSize; 
     if( hashVal < 0 )
@@ -74,7 +74,7 @@ int hash( String key, int tableSize ) {
 }
 ```
 
-并且将底数从27改为了37，这是一个很重要的改动，从一个合数变为一个质数作为底数，是为了减小发生重合的可能。
+并且将底数从27改为了31，这是一个很重要的改动，从一个合数变为一个质数作为底数，是为了减小发生重合的可能。
 
 当然这种采用火力覆盖的方式仍然会在数据量较大时占用巨大空间，导致执行速度变慢。
 
@@ -91,7 +91,8 @@ int hash( String key, int tableSize ) {
 
 接下来将讨论多个 Hash Table Collisions 的解决办法。
 
-# Separate Chaining（分散链式） *P26* 
+# Hash Table Collisions Solutions（一些解决办法）
+## Separate Chaining（分散链式） *P26* 
 
 分散链式的思想很简单，就是将 key hash到一个桶 bucket 上，哈希值（bucket）重复的元素在这个 bucket处形成一个链表来存储，需要注意添加新的元素到这个链表的后面时使用的方法是 `prepend` ，前向添加。
 
@@ -113,7 +114,7 @@ $N$ 是key的数量，$\lambda$ 表示了后续链表的平均长度。
 
 如果不使用链表呢？
 
-# Probing（探针检测） *P33* 
+## Probing（探针检测） *P33* 
 
 当我们将一个key hash后，哈希值发生碰撞，那么就移动到这个哈希值（索引）后面的某个空位置。
 
