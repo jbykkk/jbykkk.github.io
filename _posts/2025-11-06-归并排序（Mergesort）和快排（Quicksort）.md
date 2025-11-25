@@ -11,11 +11,11 @@ tags:
 math: true
 ---
 
-和堆排序类似，合并排序和快排也都是 $\Theta(n ln(n))$ 的排序算法，但是这两个排序算法会稍微更快点，因为分别需要 $\Theta(n)$ 和 $\Theta(nln(n))$ 的空间。
+和堆排序类似，合并排序和快排也都是 $\Theta(n ln(n))$ 的排序算法，但是这两个排序算法会稍微更快点，因为分别需要 $\Theta(n)$ 和 $\Theta(ln(n))$ 的空间。
 
-### Mergesort
+# 归并排序 Mergesort
 
-Mergesort 是一种递归的“分治”(divide-and-conquer) 算法，在排序算法分类中属于 "Merging"
+Mergesort 是一种递归的“分治”(divide-and-conquer) 算法。
 
 假设我们现在有两个已经排好序的 sublist，那么现在需要做的就是将这两个 sublist 合并到一个；这个操作就是Merging，具体的实现也很简单：
 
@@ -73,7 +73,10 @@ void merge_sort( Type *array, int first, int last ) {
 时间复杂度分析：
 排序一个大小为 n 的数组所需的时间 $(T(n))$ 等于排序两个 $n/2$ 的子数组的时间，加上合并它们的时间 ($\Theta(n)$)；然后可以得到递归表达式：$T(n) = 2T(n/2) + \Theta(n)$ ；
 
-### Quicksort
+需要注意，归并排序并不会改变相同元素的相对位置，这是排序算法很重要的**稳定性**。
+
+--- 
+# 快排 Quicksort
 
 快排也是基于“分治”的思想，但是
 - 我们需要找到一个基准点（Pivot）
@@ -94,20 +97,26 @@ void merge_sort( Type *array, int first, int last ) {
 
 **Median of Three，三数取中**
 
-也可以选取其他的取值方法；
+也可以选取其他的取值方法，看个人。
 
-- 我们选取这个未排序列表中的第一个，最中间的，还有最后的一个元素，然后挑选这三个数的中位数来作为pivot；
-- 然后我们的目标是将这个列表中小于pivot的元素放在pivot的左边（**从后面开始**），大于pivot的元素放在这个列表的右边（**从前面开始**），这样才能进行接下来的分治递归；
-具体实现和过程的模拟   *P240* 
+- 我们选取这个未排序列表中的第一个，最中间的，还有最后的一个元素，然后挑选**这三个数的中位数**来作为pivot；
+- 然后将这个列表中小于pivot的元素放在pivot的左边（**从后面开始**），大于pivot的元素放在这个列表的右边（**从前面开始**），整理好这个数组，这样才能进行接下来的分治递归；
 
-对于Quicksort来说，存在最后坏的情况，这时，时间和空间复杂度都变得更差；
+具体实现和过程的模拟   *P240 整理数组*     *P262 开始快排*  
 
-三个实现 $\Theta(nln(n))$ 的算法对比总结：
+对于Quicksort来说，在最坏的情况下，时间和空间复杂度都变得更差；
+并且快排不是稳定的，可能会改变相同元素初始的相对位置。原因是开始时要选取pivot并进行重排（整理数组），这时可能会改变相同元素的相对位置。
 
-| | Average Run Time | Worst-case Run Time | Average Memory | Worst-case Memory |
-| :--- | :--- | :--- | :--- | :--- |
-| **Heap Sort** | $\Theta(n \ln(n))$ | $\Theta(n \ln(n))$ | $\Theta(1)$ | $\Theta(1)$ |
-| **Merge Sort** | $\Theta(n \ln(n))$ | $\Theta(n \ln(n))$ | $\Theta(n)$ | $\Theta(n)$ |
-| **Quicksort** | $\Theta(n \ln(n))$ | $\Theta(n^2)$ | $\Theta(\ln(n))$ | $\Theta(n)$ |
+> 比如选取了57作为pivot，这时候一个44在57左，另一个在右，那么就可能将*右边的44*移动到*左边44*的前面，从而改变他们的相对位置顺序。
 
-只有Heapsort是in-place的，Mergesort和Quicksort都需要额外的空间复杂度；
+快排平均情况下的空间复杂度 $O(ln(n))$ 主要是函数调用栈造成的，递归树的高度为 $ln(n)$ 。
+
+## 三个实现 $\Theta(nln(n))$ 时间的算法对比总结：
+
+|                | Average Run Time   | Worst-case Run Time | Average Memory   | Worst-case Memory |
+| :------------- | :----------------- | :------------------ | :--------------- | :---------------- |
+| **Heap Sort**  | $\Theta(n \ln(n))$ | $\Theta(n \ln(n))$  | $\Theta(1)$      | $\Theta(1)$       |
+| **Merge Sort** | $\Theta(n \ln(n))$ | $\Theta(n \ln(n))$  | $\Theta(n)$      | $\Theta(n)$       |
+| **Quicksort**  | $\Theta(n \ln(n))$ | $\Theta(n^2)$       | $\Theta(\ln(n))$ | $\Theta(n)$       |
+
+只有Heapsort是就地（in-place）的，Mergesort和Quicksort都需要额外的空间复杂度；
