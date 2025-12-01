@@ -1,13 +1,13 @@
 ---
-title: 归并排序（Mergesort）和快排（Quicksort）
+title: 归并排序Mergesort和快排Quicksort
 date: 2025-11-06 11:58:00 +0800
 description:
 categories:
   - 数据结构
   - 课程笔记
 tags:
-  - 数据结构
-  - 排序算法
+  - 归并排序Mergesort
+  - 快排Quicksort
 math: true
 ---
 
