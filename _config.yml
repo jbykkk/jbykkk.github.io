@@ -16,7 +16,7 @@ timezone: Asia/Shanghai
 
 title: CrabPeelMyShell # the main title
 
-tagline: 山高万仞，只登一步 # it will display as the subtitle
+tagline: Must be water. # it will display as the subtitle
 
 description: >- # used by seo meta and the atom feed
   dont know
