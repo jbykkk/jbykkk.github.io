@@ -6,7 +6,6 @@ categories:
   - 数据结构
   - 课程笔记
 tags:
-  - 数据结构
   - 并查集
 math: true
 ---
@@ -87,7 +86,7 @@ void Disjoint_set::set_union(size_t i, size_t j) {
 最好情况下就是每个节点全部连到根节点，$\Theta(1)$ 
 
 对于平均情况来说，经过实验验证（选取大量节点 $2^{15}$ 然后让他们随机合并），发现树的高度增速极其缓慢，此时基本在2-3。那么在工程的角度上来说，我们可以认为平均情况下的时间复杂度是 $O(1)$ 的。
-如果严格来说，应该是 $O(\alpha(n))$ ，$\alpha(n)$ 是阿克曼函数（Ackermann Function）的逆函数。
+如果严格来说，应该是 $O(\alpha(n))$ ，$\alpha(n)$ 是阿克曼函数（Ackermann Function）的逆函数，反阿克曼函数。
 
 ## 查找的优化
 
