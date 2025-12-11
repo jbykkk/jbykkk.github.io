@@ -1,5 +1,5 @@
 ---
-title: 链表LinkedList
+title: 链表 LinkedList
 date: 2025-12-11 22:17:00 +0800
 description:
 categories:
