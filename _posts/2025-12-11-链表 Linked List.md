@@ -10,7 +10,7 @@ tags:
 math: true
 ---
 
-# List ADT
+## List ADT
 
 链表的ADT（Abstract Data Type）是 List，一种线性结构。
 
@@ -19,7 +19,7 @@ math: true
 - 链表
 对应有四种最基本的操作，即 **增（Insert）删（Delete）改（Retrieve）查（Find）**
 
-## 数组实现形式 
+### 数组实现形式 
 
 *P25-36* 
 在数组中的查找很好实现，遍历然后比较即可。
