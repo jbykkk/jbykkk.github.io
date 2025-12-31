@@ -19,7 +19,7 @@ Mergesort 是一种递归的“分治”(divide-and-conquer) 算法。
 
 假设我们现在有两个已经排好序的 sublist，那么现在需要做的就是将这两个 sublist 合并到一个；这个操作就是Merging，具体的实现也很简单：
 
-```cpp
+```c++
 int i1 = 0, i2 = 0, k = 0;
 // i1是array1的索引，i2同理，k是arrayout的索引
 
@@ -52,7 +52,7 @@ for ( ; i2 < n2; ++i2, ++k ) {
 
 需要注意mergesort的first和last边界条件，first是前一个子列表的开头，last是下一个子列表的开头（前一个子列表末尾的后面一个）。看图理解   *P168-P183*  
 
-```cpp
+```c++
 template <typename Type>
 void merge_sort( Type *array, int first, int last ) {
 	// 如果划分好了子列表，就对其进行排序
@@ -73,6 +73,8 @@ void merge_sort( Type *array, int first, int last ) {
 时间复杂度分析：
 排序一个大小为 n 的数组所需的时间 $(T(n))$ 等于排序两个 $n/2$ 的子数组的时间，加上合并它们的时间 ($\Theta(n)$)；然后可以得到递归表达式：$T(n) = 2T(n/2) + \Theta(n)$ ；
 
+最终可以得到归并排序的稳定性为 $\Theta(nln(n))$。
+
 需要注意，归并排序并不会改变相同元素的相对位置，这是排序算法很重要的**稳定性**。
 
 --- 
@@ -83,9 +85,9 @@ void merge_sort( Type *array, int first, int last ) {
 - 然后将剩余的元素根据他们和pivot的大小关系来分子列表
 - 最后递归地对这两个子列表（分区）应用 Quicksort 。
 
-那么重要的问题就是**如何找到这个基准点pivot？** 
+那么最重要的问题就是**如何找到这个基准点pivot？** 
 
-对于随机选取的情况来说，最好的情况是：这个pivot是**中位数**；
+如果随机选取，最好的情况是：这个pivot是**中位数**；
 那么我们就可以像Mergesort一样进行递归划分，然后进行排序；
 
 **但是如果我们运气没那么好呢？** 
@@ -100,7 +102,32 @@ void merge_sort( Type *array, int first, int last ) {
 也可以选取其他的取值方法，看个人。
 
 - 我们选取这个未排序列表中的第一个，最中间的，还有最后的一个元素，然后挑选**这三个数的中位数**来作为pivot；
-- 然后将这个列表中小于pivot的元素放在pivot的左边（**从后面开始**），大于pivot的元素放在这个列表的右边（**从前面开始**），整理好这个数组，这样才能进行接下来的分治递归；
+- 然后将这个列表中小于pivot的元素放在pivot的左边，大于pivot的元素放在这个列表的右边，整理好这个数组，这样才能进行接下来的分治递归；
+   - 具体操作其实是**从前往后**找比pivot大的，**从后往前**找比pivot小的，然后进行交换，直到相遇后反向(`low > high`)。
+
+```c++
+template <typename Type>
+void quicksort( Type *array, int first, int last ) {
+    if ( last - first <= N ) {
+        insertion_sort( array, first, last );
+    } else {
+        Type pivot = find_pivot( array, first, last );
+        int low    =      find_next( pivot, array, first + 1 );
+        int high   =  find_previous( pivot, array,  last - 2 );
+
+        while ( low < high ) {
+            std::swap( array[low], array[high] );
+            low    =     find_next( pivot, array,  low + 1 );
+            high   = find_previous( pivot, array, high - 1 );
+        }
+
+        array[last - 1] = array[low];
+        array[low] = pivot;
+        quicksort( array, first,  low );
+        quicksort( array,  high, last );
+    }
+}
+```
 
 具体实现和过程的模拟   *P240 整理数组*     *P262 开始快排*  
 
