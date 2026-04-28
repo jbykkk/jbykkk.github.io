@@ -26,3 +26,6 @@ assets/js/dist
 
 # obsidian
 .obsidian/
+
+# MacOS
+.DS_Store
