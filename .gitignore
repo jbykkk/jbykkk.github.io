@@ -29,3 +29,6 @@ assets/js/dist
 
 # MacOS
 .DS_Store
+
+# ClaudeCode
+.claude/
