@@ -32,3 +32,6 @@ assets/js/dist
 
 # ClaudeCode
 .claude/
+
+# Local tools
+tools/
